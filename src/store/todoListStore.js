@@ -28,4 +28,21 @@ export const todoListStore = create((set, get) => ({
     const { todos } = get();
     return todos.length - todos.filter((item) => item.completed).length;
   },
+  newItemName: "",
+  handleInputChange: (e) => {
+    set({ newItemName: e.target.value });
+  },
+  handleAddItem: () => {
+    const { newItemName, todos } = get();
+    if (newItemName.trim() === "") return;
+    const newItem = {
+      id: Date.now(),
+      title: newItemName,
+      completed: false,
+    };
+    set((state) => ({
+      todos: [...state.todos, newItem],
+      newItemName: "",
+    }));
+  }
 }));
