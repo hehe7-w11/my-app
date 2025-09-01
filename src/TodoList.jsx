@@ -28,9 +28,8 @@ export default function TodoList() {
     handleInputChange,
     newItemName,
     handleAddItem,
+    handleKeyDown,
   } = todoListStore();
-
-  
 
   return (
     <section>
@@ -56,7 +55,7 @@ export default function TodoList() {
           type="text"
           value={newItemName}
           onChange={handleInputChange}
-        //   onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyDown}
           placeholder="输入新物品名称"
         />
         <button onClick={handleAddItem}>添加</button>

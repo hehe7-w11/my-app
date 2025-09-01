@@ -33,7 +33,7 @@ export const todoListStore = create((set, get) => ({
     set({ newItemName: e.target.value });
   },
   handleAddItem: () => {
-    const { newItemName, todos } = get();
+    const { newItemName } = get();
     if (newItemName.trim() === "") return;
     const newItem = {
       id: Date.now(),
@@ -44,5 +44,10 @@ export const todoListStore = create((set, get) => ({
       todos: [...state.todos, newItem],
       newItemName: "",
     }));
-  }
+  },
+  handleKeyDown: (e) => {
+    if (e.key !== "Enter") return;
+    const { handleAddItem } = get();
+    handleAddItem();
+  },
 }));
