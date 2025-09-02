@@ -57,7 +57,6 @@ export const todoListStore = create((set, get) => ({
     set({ newItemName: e.target.value });
   },
   handleAddItem: async (e) => {
-    e.preventDefault();
     const { newItemName } = get();
     if (newItemName.trim() === "") return;
     const newItem = {
