@@ -1,5 +1,6 @@
 import { todoListStore } from "./store/todoListStore.js";
 import styles from "./TodoList.module.css";
+import { useEffect } from "react";
 
 function TodoItem({ title, completed, onToggle }) {
   const itemClassName = `${styles.item} ${completed ? styles.checked : ""}`;
@@ -28,8 +29,14 @@ export default function TodoList() {
     handleInputChange,
     newItemName,
     handleAddItem,
-    handleKeyDown,
+    clearCompletedItems,
+    fetchTodos,
   } = todoListStore();
+
+  // 初始加载数据
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   return (
     <section>
@@ -40,6 +47,9 @@ export default function TodoList() {
         <span>已打包: {getPackedCount()}</span>
         <span>未打包: {getUnpackedCount()}</span>
       </div>
+      <button onClick={clearCompletedItems} disabled={getPackedCount() === 0}>
+        清除已完成 ({getPackedCount()})
+      </button>
       <div>
         <label>
           <input
@@ -51,14 +61,15 @@ export default function TodoList() {
         </label>
       </div>
       <div>
+        <form onSubmit={handleAddItem}>
         <input
           type="text"
           value={newItemName}
           onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
           placeholder="输入新物品名称"
         />
-        <button onClick={handleAddItem}>添加</button>
+        <button type="submit" >添加</button>
+        </form>
       </div>
       <ul>
         {/* 使用过滤后的列表进行渲染 */}

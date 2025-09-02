@@ -1,8 +1,19 @@
 import { create } from "zustand";
-import todoItems from "../todoItems.json";
+import Api from "../api";
 
 export const todoListStore = create((set, get) => ({
-  todos: todoItems,
+  todos: [],
+  loading: false,
+  error: null,
+  fetchTodos: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await Api.get("/todos");
+      set({ todos: response.data, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
   isFilter: false,
   setIsFilter: () => set((state) => ({ isFilter: !state.isFilter })),
   handleItemToggle: (item) =>
@@ -45,9 +56,9 @@ export const todoListStore = create((set, get) => ({
       newItemName: "",
     }));
   },
-  handleKeyDown: (e) => {
-    if (e.key !== "Enter") return;
-    const { handleAddItem } = get();
-    handleAddItem();
-  },
+  clearCompletedItems: () =>
+    set((state) => ({
+      // 过滤掉所有 completed 为 true 的项，只保留未完成项
+      todos: state.todos.filter((item) => !item.completed),
+    })),
 }));
