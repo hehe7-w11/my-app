@@ -8,6 +8,7 @@ export const todoListStore = create((set, get) => ({
   page: 1,
   totalElements: 1,
   totalPages: 1,
+  setPage: (newPage) => set({ page: newPage }),
   fetchTodos: async () => {
     const { page } = get();
     set({ loading: true, error: null });

@@ -33,7 +33,14 @@ export default function TodoList() {
     handleAddItem,
     clearCompletedItems,
     fetchTodos,
+    setPage,
+    page: currentPage,
   } = todoListStore();
+
+    const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+    fetchTodos(newPage);
+  };
 
   // 初始加载数据
   useEffect(() => {
@@ -84,7 +91,12 @@ export default function TodoList() {
           />
         ))}
       </ul>
-      <Pagination count={totalPages}></Pagination>
+      <Pagination
+        count={totalPages}
+        page={currentPage} // 核心：绑定当前页码（从 Store 获取）
+        onChange={handlePageChange} // 核心：页码切换时触发
+        color="primary"
+      ></Pagination>
     </section>
   );
 }
