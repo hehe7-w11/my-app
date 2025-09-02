@@ -14,3 +14,113 @@
     opacity: 0.7;
 }
 
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+}
+
+.clearBtn {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.clearBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.filterContainer {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+}
+
+.addForm {
+  margin: 15px 0;
+}
+
+.addForm input {
+  padding: 8px;
+  width: 60%;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.addForm button {
+  padding: 8px 16px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addForm button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.item {
+  padding: 12px;
+  margin: 8px 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.item.checked {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
+.paginationContainer {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #dc3545;
+}
+
+.emptyMessage {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-style: italic;
+}

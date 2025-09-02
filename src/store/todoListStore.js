@@ -8,9 +8,8 @@ export const todoListStore = create((set, get) => ({
   page: 1,
   totalElements: 1,
   totalPages: 1,
-  fetchTodos: async (newPage) => {
-    const {page} = get();
-    page = newPage || page;
+  fetchTodos: async () => {
+    const { page } = get();
     set({ loading: true, error: null });
     try {
       const data = await Api.get(`/api/v1/todos?page=${page}&size=7`);

@@ -1,7 +1,7 @@
 import { todoListStore } from "./store/todoListStore.js";
 import styles from "./TodoList.module.css";
 import { useEffect } from "react";
-
+import { Pagination } from "@mui/material";
 
 function TodoItem({ title, completed, onToggle }) {
   const itemClassName = `${styles.item} ${completed ? styles.checked : ""}`;
@@ -24,7 +24,8 @@ export default function TodoList() {
     isFilter,
     handleItemToggle,
     setIsFilter,
-    getTotalCount,
+    totalElements,
+    totalPages,
     getPackedCount,
     getUnpackedCount,
     handleInputChange,
@@ -44,7 +45,7 @@ export default function TodoList() {
       <h1>Sally Ride 的 行李打包 清单</h1>
       <h1>(Zustand版本)</h1>
       <div>
-        <span>总计: {getTotalCount()}</span>
+        <span>总计: {totalElements}</span>
         <span>已打包: {getPackedCount()}</span>
         <span>未打包: {getUnpackedCount()}</span>
       </div>
@@ -63,13 +64,13 @@ export default function TodoList() {
       </div>
       <div>
         <form onSubmit={handleAddItem}>
-        <input
-          type="text"
-          value={newItemName}
-          onChange={handleInputChange}
-          placeholder="输入新物品名称"
-        />
-        <button type="submit" >添加</button>
+          <input
+            type="text"
+            value={newItemName}
+            onChange={handleInputChange}
+            placeholder="输入新物品名称"
+          />
+          <button type="submit">添加</button>
         </form>
       </div>
       <ul>
@@ -83,7 +84,7 @@ export default function TodoList() {
           />
         ))}
       </ul>
-  
+      <Pagination count={totalPages}></Pagination>
     </section>
   );
 }
