@@ -8,8 +8,8 @@ export const todoListStore = create((set, get) => ({
   fetchTodos: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await Api.get("/todos");
-      set({ todos: response.data, loading: false });
+      const data = await Api.get("/api/v1/todos");
+      set({ todos: data, loading: false });
     } catch (error) {
       set({ error: error.message, loading: false });
     }
@@ -43,22 +43,44 @@ export const todoListStore = create((set, get) => ({
   handleInputChange: (e) => {
     set({ newItemName: e.target.value });
   },
-  handleAddItem: () => {
+  handleAddItem: async (e) => {
+    e.preventDefault();
     const { newItemName } = get();
     if (newItemName.trim() === "") return;
     const newItem = {
-      id: Date.now(),
+      // id: Date.now(),
       title: newItemName,
       completed: false,
     };
+    try {
+      const data = await Api.post("/api/v1/todos", newItem);
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
     set((state) => ({
       todos: [...state.todos, newItem],
       newItemName: "",
     }));
   },
-  clearCompletedItems: () =>
-    set((state) => ({
-      // 过滤掉所有 completed 为 true 的项，只保留未完成项
-      todos: state.todos.filter((item) => !item.completed),
-    })),
+ clearCompletedItems: async () => {
+  const { todos } = get();
+  const completedItems = todos.filter(item => item.completed);
+  if (completedItems.length === 0) return; 
+  try {
+    set({ loading: true, error: null });
+    for (const item of completedItems) {
+      await Api.delete(`/api/v1/todos/${item.id}`);
+    }
+    set(state => ({
+      todos: state.todos.filter(item => !item.completed),
+      loading: false
+    }));
+  } catch (error) {
+    set({
+      error: error.message || "删除失败，请重试",
+      loading: false
+    });
+  }
+},
+
 }));

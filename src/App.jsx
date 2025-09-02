@@ -9,7 +9,6 @@ function App() {
     <>
       <div>
         <TodoList></TodoList>
-        {/* <TestTodoList></TestTodoList> */}
       </div>
     </>
   );
