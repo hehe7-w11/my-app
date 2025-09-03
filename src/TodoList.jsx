@@ -1,7 +1,8 @@
 import { todoListStore } from "./store/todoListStore.js";
 import styles from "./TodoList.module.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Pagination } from "@mui/material";
+import { useSearchParams } from "react-router";
 
 function TodoItem({ title, completed, onToggle }) {
   const itemClassName = `${styles.item} ${completed ? styles.checked : ""}`;
@@ -37,15 +38,31 @@ export default function TodoList() {
     page: currentPage,
   } = todoListStore();
 
-    const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-    fetchTodos(newPage);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = parseInt(searchParams.get("page")) || 1;
+  const isFirstLoad = useRef(true);
+
+  const handlePageChange = (event, newPage) => {
+    const validPage = Math.max(1, Math.min(newPage, totalPages || 1));
+    if (validPage === currentPage) return;
+    searchParams.set("page", validPage);
+    setSearchParams(searchParams);
+    setPage(validPage);
+    fetchTodos(validPage);
   };
 
-  // 初始加载数据
   useEffect(() => {
-    fetchTodos();
-  }, []);
+    if (totalPages === 0) return;
+    if (isFirstLoad.current) {
+      fetchTodos(pageParam); // 初始请求第1页数据
+      isFirstLoad.current = false; // 标记为“非首次”，后续不再执行
+      return;
+    }
+    if (pageParam !== currentPage) {
+      setPage(pageParam);
+      fetchTodos(pageParam);
+    }
+  }, [pageParam, totalPages, setPage, fetchTodos]);
 
   return (
     <section>
@@ -93,8 +110,8 @@ export default function TodoList() {
       </ul>
       <Pagination
         count={totalPages}
-        page={currentPage} // 核心：绑定当前页码（从 Store 获取）
-        onChange={handlePageChange} // 核心：页码切换时触发
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
       ></Pagination>
     </section>

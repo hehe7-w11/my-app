@@ -25,14 +25,30 @@ export const todoListStore = create((set, get) => ({
     }
   },
   setPage: (newPage) => {
-    set((state) => ({ 
-      page: newPage 
-    }), false, 'setPage'); 
-    get().fetchTodos(); 
+    set(
+      (state) => ({
+        page: newPage,
+      }),
+      false,
+      "setPage"
+    );
+    get().fetchTodos();
   },
   isFilter: false,
-  
-  setIsFilter: () => set((state) => ({ isFilter: !state.isFilter })),
+
+  setIsFilter: (item) => {
+    try {
+      const newItem = {
+        id: item.id,
+        title: item.title,
+        completed: true,
+      };
+      const data = Api.update("/api/v1/todos", newItem);
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+    set((state) => ({ isFilter: !state.isFilter }));
+  },
   handleItemToggle: (item) =>
     set((state) => ({
       todos: state.todos.map((todo) =>
